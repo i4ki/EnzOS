@@ -53,10 +53,10 @@ setcursor:
 
 clearscreen:
 	pusha
-	mov ax,0x0600	; clear the "window"
-	mov cx,0x0000   ; from (0,0)
-	mov dx,0x184f	; to (24,79)
-	mov bh,0x07	; keep light grey display
+	mov ax, 0x0600	; clear the "window"
+	mov cx, 0x0000   ; from (0,0)
+	mov dx, 0x184f	; to (24,79)
+	mov bh, 0x07	; keep light grey display
 	int 0x10
 	popa
 	ret
@@ -88,7 +88,7 @@ printstr:
         ret
 
 ;;; set up a little stack
-stack_bottom: times 50 db 0
+stack_bottom:   times 50 db 0
 stack_top:
 
 BANNER:         db "EnzOS bootloader v0.0.1", 0
