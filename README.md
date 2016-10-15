@@ -38,7 +38,13 @@ code. The user must select a device, and then a partition.
     +---------------------------------------------------------+
 
 Then, the system must open a menu to user select the file or create a
-new one on a specified directory. After that, the assembler IDE will
+new one on a specified directory. 
+
+Example file selection from MikeOS:
+
+![select file](http://i.stack.imgur.com/mr8H2.png)
+
+After that, the assembler IDE will
 show up.
 
     +---------------------------------------------------------+
