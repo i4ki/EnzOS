@@ -14,6 +14,7 @@ be used for:
  - Test new ideas on OS development very fast;
  - Teach or learn assembly and operating systems design;
  - Create a bootloader;
+ - [Create games](https://gist.github.com/majkrzak/d75a5b90b3735edd53ac)
  - Create an assembly driver for a gadget/device;
  - Have fun!
 
