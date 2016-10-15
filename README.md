@@ -4,7 +4,7 @@ Operating system for operating system writers.
 
 ## Introduction
 
-The idea of EnzOS is build a basic real-mode operating system as a
+The idea of EnzOS is to build a basic real-mode operating system as a
 tool and IDE to create another operating system.
 
 The main goal is develop a very old-fashioned assembly IDE, that can
