@@ -5,21 +5,21 @@
 
         call clearscreen
 
-        xor dx, dx              ; pos 0, 0
+        xor dx, dx      ; pos 0, 0
         call setcursor
 
         mov si, BANNER
         call printstr
 
         mov dl, 0
-        mov dh, 1               ; newline
+        mov dh, 1       ; newline
         call setcursor
 
         xor dx, dx
 
-        mov	dl, 80h      	; tell bios to look at hard drives 
-	mov	AH, 8h	     	; set command to get drive parameter 
-	int	13h	     	; call BIOS to get number of drives
+        mov dl, 80h     ; tell bios to look at hard drives 
+        mov ah, 8h      ; set command to get drive parameter 
+        int 13h         ; call BIOS to get number of drives
 
         jc noharddrive
 
