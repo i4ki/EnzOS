@@ -42,7 +42,6 @@ fn buildLoader() {
 
 	sectsz <= getnsectors()
 
-	echo nasm $ASFLAGS "-DLOADNSECTORS="+$sectsz -o $BOOTLOADER_BIN $BOOTLOADER_SRC
 	nasm $ASFLAGS "-DLOADNSECTORS="+$sectsz -o $BOOTLOADER_BIN $BOOTLOADER_SRC
 }
 
