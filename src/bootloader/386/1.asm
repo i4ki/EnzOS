@@ -4,6 +4,8 @@
 	[BITS 16]
 	[ORG  0]
 
+        %define ENZOS_ADDR 0x2000
+
 	jmp start; skip data
 
 	;;         some data
@@ -32,7 +34,7 @@ reboot:
 
 start:
 	;;  DO NOT rely on any register except dl
-	mov ax, 0x7c0
+	mov ax, 0x7c00
 	mov ds, ax; Set ds to easy access data
 
 	mov [BOOTDRV], dl; save the drive we booted from
@@ -79,7 +81,7 @@ loadEnzOS:
 	jc  reboot
 
 	;;  Load EnzOS above the stack (0x9000:0000)
-	mov ax, 0x09000
+	mov ax, ENZOS_ADDR
 	mov es, ax
 	xor bx, bx
 
@@ -127,4 +129,4 @@ clear_buf2:
 end:
 
 	;;  jump to EnzOS skipping the magic number
-	jmp 0x9000:0004
+	jmp ENZOS_ADDR:0004

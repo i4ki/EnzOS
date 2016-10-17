@@ -1,7 +1,7 @@
 #!/usr/bin/env nash
 
 IFS            = ()
-ASFLAGS        = ("-fbin" "-i" "./src/EnzOS/386/")
+ASFLAGS        = ("-fbin")
 BOOTLOADER_SRC = (./src/bootloader/386/1.asm)
 ENZOS_SRC      = (./src/EnzOS/386/1.asm)
 BOOTLOADER_BIN = "bootloader.bin"
@@ -28,7 +28,9 @@ fn getnsectors() {
 }
 
 fn buildEnzOS() {
-	nasm $ASFLAGS -o $ENZOS_BIN $ENZOS_SRC
+	includes = ("-i" "./src/EnzOS/386/")
+
+	nasm $ASFLAGS $includes -o $ENZOS_BIN $ENZOS_SRC
 }
 
 fn buildLoader() {
@@ -42,7 +44,14 @@ fn buildLoader() {
 
 	sectsz <= getnsectors()
 
-	nasm $ASFLAGS "-DLOADNSECTORS="+$sectsz -o $BOOTLOADER_BIN $BOOTLOADER_SRC
+	includes = (
+		"-i"
+		"./src/bootloader/386/"
+		"-i"
+		"./src/EnzOS/386/"
+	)
+
+	nasm $ASFLAGS $includes "-DLOADNSECTORS="+$sectsz -o $BOOTLOADER_BIN $BOOTLOADER_SRC
 }
 
 fn makeDisk() {

@@ -13,6 +13,7 @@ be used for:
 
  - Test new ideas on OS development very fast;
  - Teach or learn assembly and operating systems design;
+ - Use your real hardware as if it were an emulator;
  - Create a bootloader;
  - Create an assembly driver for a gadget/device;
  - Have fun!
