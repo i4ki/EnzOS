@@ -93,3 +93,5 @@ into IDE again.
 - There's no requirement to write it in real mode. It's only the most
   easy way... (using the BIOS). We can write it to protected mode, and
   fallback to real mode to execute the user code.
+  
+  https://hackaday.io/project/16410-enzos
