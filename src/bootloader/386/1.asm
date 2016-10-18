@@ -16,6 +16,9 @@
 	ETRYAGAIN  db "Error reading disk... try again.", 13, 10, 0
 	ENZOSMAGIC db 1, 3, 3, 7
 
+        ENZOS_SEGMENT equ 0500h
+        ENZOS_SKIPHDR equ 0004h
+
 	;; common routines
 
 	%include "common.asm"
@@ -32,14 +35,14 @@ reboot:
 
 start:
 	;;  DO NOT rely on any register except dl
-	mov ax, 0x7c0
+	mov ax, 0x7c0           ; 0x7c00 / 16 == segment address
 	mov ds, ax; Set ds to easy access data
 
 	mov [BOOTDRV], dl; save the drive we booted from
 
 	;;  Setup the stack at physical location 0x9000
 	cli ; required, because BIOS can update sp
-	mov ax, 0x0900
+	mov ax, 0x07e0
 	mov ss, ax
 	mov sp, 0xffff; whole segment, 64Kib of stack
 	sti
@@ -79,7 +82,7 @@ loadEnzOS:
 	jc  reboot
 
 	;;  Load EnzOS above the stack (0x9000:0000)
-	mov ax, 0x09000
+	mov word ax, ENZOS_SEGMENT
 	mov es, ax
 	xor bx, bx
 
@@ -125,6 +128,4 @@ clear_buf2:
 	loop   wait_kbc; command.
 
 end:
-
-	;;  jump to EnzOS skipping the magic number
-	jmp 0x9000:0004
+	jmp ENZOS_SEGMENT:ENZOS_SKIPHDR

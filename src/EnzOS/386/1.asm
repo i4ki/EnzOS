@@ -8,6 +8,9 @@
 
 	MAGIC db 1, 3, 3, 7
 
+        mov ax, 0x0500
+	mov ds, ax; Set ds to easy access data
+        
 	jmp start
 
 	BANNER    db "Welcome to EnzOS", 13, 10, 0
@@ -27,9 +30,6 @@ reboot:
 	;; bye bye
 
 start:
-	mov ax, 0x9000
-	mov ds, ax; Set ds to easy access data
-
 	call clearscreen
 
 	mov  si, BANNER

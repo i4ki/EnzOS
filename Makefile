@@ -5,3 +5,9 @@ build:
 
 test:
 	./make.sh test
+
+debug:
+	./make.sh debug-start-vm
+
+gdb:
+	./make.sh debug-gdb
