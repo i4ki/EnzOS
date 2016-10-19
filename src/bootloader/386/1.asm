@@ -2,11 +2,19 @@
 	;;    EnzOS bootloader
 	;;--------------------------------------
 	[BITS 16]
-	[ORG  0]
+        [ORG 0x7c00] 
 
 	jmp start; skip data
 
 	;;         some data
+ gdtinfo:
+        dw gdt_end - gdt - 1   ;last byte in table
+        dd gdt                 ;start of table
+ 
+        gdt         dd 0,0        ; entry 0 is always unused
+        flatdesc    db 0xff, 0xff, 0, 0, 0, 10010010b, 11001111b, 0
+gdt_end:
+        
 	BOOTDRV    db 0
 	DRVNO      db 0
 	NERRORS    db 0
@@ -34,20 +42,41 @@ reboot:
 	;; bye bye
 
 start:
-	;;  DO NOT rely on any register except dl
-	mov ax, 0x7c0           ; 0x7c00 / 16 == segment address
-	mov ds, ax; Set ds to easy access data
-
 	mov [BOOTDRV], dl; save the drive we booted from
 
-	;;  Setup the stack at physical location 0x9000
-	cli ; required, because BIOS can update sp
+        xor ax, ax
+        mov ds, ax
+
+	;;  Setup the stack
+	cli ; cli required, because BIOS could update sp
 	mov ax, 0x07e0
 	mov ss, ax
 	mov sp, 0xffff; whole segment, 64Kib of stack
-	sti
 
-	call clearscreen
+        ;; Setup Unreal Mode
+        ;; Enables 4GB addressing with 32-bit registers
+        ;; Code segment is still limited to 64Kib
+        ;; http://wiki.osdev.org/Unreal_Mode
+        ;; The code below enter protected mode mode, setup
+        ;; gdt and go back to real mode
+        push ds                ; save real mode
+
+        lgdt [gdtinfo]         ; load gdt register
+ 
+        mov  eax, cr0          ; switch to pmode by
+        or al,1                ; set pmode bit
+        mov  cr0, eax
+ 
+        jmp $+2                ; tell 386/486 to not crash
+ 
+        mov  bx, 0x08          ; select descriptor 1
+        mov  ds, bx            ; 8h = 1000b
+ 
+        and al,0xFE            ; back to realmode
+        mov  cr0, eax          ; by toggling bit again
+ 
+        pop ds                 ; get back old segment
+        sti
 
 	xor  dx, dx; pos 0, 0
 	call setcursor
@@ -70,7 +99,7 @@ errLoading:
 
 	mov bl, NERRORS
 	add bl, 1
-	cmp bl, 3
+	test bl, 3
 	jz  reboot
 
 	mov [NERRORS], bl
@@ -129,3 +158,4 @@ clear_buf2:
 
 end:
 	jmp ENZOS_SEGMENT:ENZOS_SKIPHDR
+

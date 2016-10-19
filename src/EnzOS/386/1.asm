@@ -6,6 +6,10 @@
 	[BITS 16]
 	[ORG  0]
 
+        POWERSTATE_STANDBY equ 01h
+        POWERSTATE_SUSPEND equ 02h
+        POWERSTATE_OFF     equ 03h
+
 	MAGIC db 1, 3, 3, 7
 
         mov ax, 0x0500
@@ -18,6 +22,7 @@
 	REBOOTMSG db "Press any key to reboot...", 13, 10, 0
 
 	%include "common.asm"
+        %include "apm.asm"
 
 reboot:
 	mov  si, REBOOTMSG
@@ -37,4 +42,8 @@ start:
 	mov  si, AUTHORS
 	call printstr
 
-	jmp reboot
+        call apm_install_check
+        call apm_connect
+        call apm_enable_all
+
+	call reboot
