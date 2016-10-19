@@ -1,14 +1,19 @@
 #!/usr/bin/env nash
 
 IFS            = ()
-ASFLAGS        = ("-fbin" "-i" "./src/EnzOS/386/")
+ASFLAGS = (
+	"-fbin"
+	"-i"
+	"./src/EnzOS/386/"
+	"-i"
+	"./src/EnzOS/"
+)
+
 BOOTLOADER_SRC = (./src/bootloader/386/1.asm)
 ENZOS_SRC      = (./src/EnzOS/386/1.asm)
 BOOTLOADER_BIN = "bootloader.bin"
 ENZOS_BIN      = "EnzOS.bin"
 DISKIMG        = "disk.raw"
-
-rm -f $DISKIMG $ENZOS_BIN $BOOTLOADER_BIN
 
 # getnsectors returns the amount of block sectors needed to
 # fit the EnzOS
@@ -17,12 +22,20 @@ fn getnsectors() {
 
 	kernelsz <= wc -c $ENZOS_BIN | cut -d " " -f1 | tr -d "\n"
 	sectsz   <= -expr $kernelsz "/" 512 | tr -d "\n"
+	rem      <= -expr $kernelsz "%" 512 | tr -d "\n"
 
 	if $sectsz == "0" {
-		sectsz <= expr $sectsz "+" 1 | tr -d "\n"
+		return "1"
 	} else if $sectsz == "" {
-		sectsz <= expr 0 "+" 1 | tr -d "\n"
+		return "1"
 	}
+	if $status != "0" {
+		return $sectsz
+	}
+
+	echo expr $sectsz "+" 1 | tr -d "\n"
+
+	sectsz <= expr $sectsz "+" 1 | tr -d "\n"
 
 	return $sectsz
 }
@@ -43,6 +56,7 @@ fn buildLoader() {
 	sectsz <= getnsectors()
 
 	nasm $ASFLAGS "-DLOADNSECTORS="+$sectsz -o $BOOTLOADER_BIN $BOOTLOADER_SRC
+	echo nasm $ASFLAGS "-DLOADNSECTORS="+$sectsz -o $BOOTLOADER_BIN $BOOTLOADER_SRC
 }
 
 fn makeDisk() {
@@ -50,10 +64,7 @@ fn makeDisk() {
 
 	sectsz <= getnsectors()
 
-	# add a sector to put mbr
-	sectsz <= expr $sectsz "+" 1 | tr -d "\n"
-
-	dd "if=/dev/zero" "of="+$DISKIMG "bs=512" "count="+$sectsz
+	dd "if=/dev/zero" "of="+$DISKIMG "bs=512" "count=1"
 
 	# workaround to force use of our fdisk
 	p    = $PATH
@@ -67,14 +78,14 @@ fn makeDisk() {
 
 	setenv PATH
 
-	codesz    <= wc -c $ENZOS_BIN | cut -d " " -f1 | tr -d "\n"
-	remaining <= -expr 512 "-" $codesz
-	seek      <= expr 512 "+" $codesz
+	codesz <= wc -c $ENZOS_BIN | cut -d " " -f1 | tr -d "\n"
 
-	dd "if="+$ENZOS_BIN "of="+$DISKIMG "oflag=seek_bytes" "seek=512" "bs="+$codesz "count=1"
-
-	#	dd "if=/dev/zero" "of="+$DISKIMG "seek="+$seek "bs="+$remaining "count=1"
+	printf "CODESIZE=%d, SECTSZ=%d\n" $codesz $sectsz
+	dd "if="+$ENZOS_BIN "of="+$DISKIMG "oflag=seek_bytes" "seek=512" "bs=512" "count="+$sectsz
+	wc -c $DISKIMG
 }
+
+rm -f $DISKIMG $ENZOS_BIN $BOOTLOADER_BIN
 
 buildEnzOS()
 buildLoader()

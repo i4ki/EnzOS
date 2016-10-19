@@ -17,12 +17,12 @@
         
 	jmp start
 
-	BANNER    db "Welcome to EnzOS", 13, 10, 0
 	AUTHORS   db "Authors: i4k & katz", 13, 10, 0
 	REBOOTMSG db "Press any key to reboot...", 13, 10, 0
 
 	%include "common.asm"
-        %include "apm.asm"
+        ;; %include "apm.asm"
+        %include "main.asm"
 
 reboot:
 	mov  si, REBOOTMSG
@@ -35,15 +35,13 @@ reboot:
 	;; bye bye
 
 start:
-	call clearscreen
+        ;; call apm_install_check
+        ;; call apm_connect
+        ;; call apm_enable_all
 
-	mov  si, BANNER
-	call printstr
-	mov  si, AUTHORS
-	call printstr
 
-        call apm_install_check
-        call apm_connect
-        call apm_enable_all
 
-	call reboot
+        call _main
+
+        jmp $
+        
