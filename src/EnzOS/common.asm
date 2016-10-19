@@ -1,3 +1,7 @@
+        ;; Common code between Bootloader and EnzOS
+        ;; DO NOT PUT code not shared among loader and OS
+        ;; because of the 512 bytes limit.
+
 setcursor:
 	pusha
 	xor ax, ax
@@ -47,20 +51,3 @@ getkey:
 	int 16h
 	ret
 
-getdrvno:
-	;;  no input
-	;;  Return number of drives in register dl
-	;;  In case of error, dl will have 0xff
-	xor dx, dx
-
-	mov dl, 80h; tell bios to look at hard drives
-	mov ah, 8h; set command to get drive parameter
-	int 13h; call BIOS to get number of drives
-
-	jc .noharddrive
-
-	ret
-
-.noharddrive:
-	mov dl, 0xff
-	ret

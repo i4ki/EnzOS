@@ -29,7 +29,7 @@ gdt_end:
 
 	;; common routines
 
-	%include "common.asm"
+	%include "src/EnzOS/common.asm"
 
 reboot:
 	mov  si, REBOOTMSG

@@ -1,16 +1,9 @@
 #!/usr/bin/env nash
 
 IFS            = ()
-ASFLAGS = (
-	"-fbin"
-	"-i"
-	"./src/EnzOS/386/"
-	"-i"
-	"./src/EnzOS/"
-)
-
-BOOTLOADER_SRC = (./src/bootloader/386/1.asm)
-ENZOS_SRC      = (./src/EnzOS/386/1.asm)
+ASFLAGS        = ("-fbin")
+BOOTLOADER_SRC = (./src/bootloader/1.asm)
+ENZOS_SRC      = (./src/EnzOS/main.asm)
 BOOTLOADER_BIN = "bootloader.bin"
 ENZOS_BIN      = "EnzOS.bin"
 DISKIMG        = "disk.raw"
