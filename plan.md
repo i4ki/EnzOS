@@ -1,5 +1,7 @@
 # Plan notes
 
+# x86 mode of operation
+
 My initial plan was to make a 16-bit real mode minimal OS because it could be much more simple
 that way and the system does not require 32-bit protected mode features. But below is 
 some trade offs comparison focusing on our use case. It explains why the current choice was
@@ -67,4 +69,21 @@ Pros:
 Cons:
 - Requires pmode -> real mode to test user code;
 - **Requires development of drivers (disk, serial, etc);**
-  
+
+# Bootloader
+
+## Why not use GRUB?
+
+GRUB only supports 32-bit protected mode operating systems or chainloading of 16-bit real mode bootloaders.
+In other words, if we want to build a real mode operating system we need a custom bootloader anyway.
+
+## EnzOS loader
+
+The current loader is responsible for the following tasks:
+
+- Enable 32-bit addressing (enter unreal mode)
+- Load EnzOS at contiguous memory address.
+- Jump to it
+
+It is simple and works as expected, but probably will change to soon to support load a DOS
+or ELF file, mostly because that C compilers didn't like flat binaries.
