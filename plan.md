@@ -5,11 +5,11 @@
 My initial plan was to make a 16-bit real mode minimal OS because it could be much more simple
 that way and the system does not require 32-bit protected mode features. But below is 
 some trade offs comparison focusing on our use case. It explains why the current choice was
-32-but (un)real mode.
+32-bit (un)real mode.
 
 ## 16-bit real mode
 
-While development in real mode is a big advantage in our case (because of BIOS access), 
+While development in real mode is a big advantage in our case (because of BIOS services), 
 being stuck in the 16-bit addressing makes VGA programming inneficient and/or clumsy.
 If using the BIOS modes and interruptions (int 10h), the overhead to draw in the screen 
 several times could be a problem. The other way, acessing video memory directly is much more
