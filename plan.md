@@ -1,5 +1,10 @@
 # Plan notes
 
+My initial plan was to make a 16-bit real mode minimal OS because it could be much more simple
+that way and the system does not require 32-bit protected mode features. But below is 
+some trade offs comparison focusing on our use case. It explains why the current choice was
+32-but (un)real mode.
+
 ## 16-bit real mode
 
 While development in real mode is a big advantage in our case (because of BIOS access), 
@@ -61,5 +66,5 @@ Pros:
   
 Cons:
 - Requires pmode -> real mode to test user code;
-- Requires development of drivers (disk, serial, etc);
+- **Requires development of drivers (disk, serial, etc);**
   
