@@ -30,6 +30,7 @@ Cons:
 - Code/data size limits (64 Kib) and maximum of 1MB of memory; 
 - Hard to use C nowadays;
 
+
 ## 32-bit real mode - aka Unreal mode
 
 Unreal mode is a documented feature of 386 processors that enables up to 4Gib of address space while in real mode.
@@ -37,28 +38,28 @@ Until today, every intel processor since 386 had this feature, but it's very obs
 if not correctly understood.
 
 Pros:
- - Easy programming by using BIOS functions;
- - Easy to setup processor to test;
- - Up to 4Gib address space
- - Easy to print to screen;
- - Easy to use C;
+- Easy programming by using BIOS functions;
+- Easy to setup processor to test;
+- Up to 4Gib address space
+- Easy to print to screen;
+- Easy to use C;
 
 Cons:
- - Support may be dropped in the future;
- - Obscure feature;
+- Support may be dropped in the future;
+- Obscure feature;
  
- ## 32-bit protected mode
+## 32-bit protected mode
  
- Memory protection is a killer feature for operating systems, but useless in our case (no userspace software).
- Protected supports vm86 real mode tasks, but it cannot be used in our cause because it doesn't support the 
- switch to protected mode.
+Memory protection is a killer feature for operating systems, but useless in our case (no userspace software).
+Protected supports vm86 real mode tasks, but it cannot be used in our cause because it doesn't support the 
+switch to protected mode.
  
- Pros:
-  - Up to 4Gib address space;
-  - Easy to print to screen;
-  - Easy to use C;
+Pros:
+- Up to 4Gib address space;
+- Easy to print to screen;
+- Easy to use C;
   
- Cons:
-  - Requires pmode -> real mode to test user code;
-  - Requires development of drivers (disk, serial, etc);
+Cons:
+- Requires pmode -> real mode to test user code;
+- Requires development of drivers (disk, serial, etc);
   
