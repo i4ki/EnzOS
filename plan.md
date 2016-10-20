@@ -85,5 +85,5 @@ The current loader is responsible for the following tasks:
 - Load EnzOS at contiguous memory address.
 - Jump to it
 
-It is simple and works as expected, but probably will change to soon to support load a DOS
+It is simple and works as expected, but probably will change soon to support load a DOS
 or ELF file, mostly because that C compilers didn't like flat binaries.
