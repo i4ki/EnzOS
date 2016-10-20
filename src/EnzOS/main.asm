@@ -7,9 +7,6 @@
 	[ORG  0]
 
 	MAGIC db 1, 3, 3, 7
-
-        mov ax, 0x0500
-	mov ds, ax; Set ds to easy access data
         
 	jmp main
 
@@ -34,6 +31,18 @@ reboot:
 	;; bye bye
 
 main:
+        mov ax, 0x0500
+	mov ds, ax; Set ds to easy access data
+        mov gs, ax
+        mov fs, ax
+        mov es, ax
+
+        cli
+        mov ax, 0x0800
+        mov ss, ax
+        mov sp, 0xffff
+        sti
+        
         call apm_install_check
         call apm_connect
         call apm_enable_all

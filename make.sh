@@ -75,6 +75,17 @@ fn makeDisk() {
 
 	printf "CODESIZE=%d, SECTSZ=%d\n" $codesz $sectsz
 	dd "if="+$ENZOS_BIN "of="+$DISKIMG "oflag=seek_bytes" "seek=512" "bs=512" "count="+$sectsz
+
+	totalBytes = "0"
+
+	totalBytes <= -expr $sectsz "*" 512 | tr -d "\n"
+	rem        <= -expr $totalBytes "-" $codesz | tr -d "\n"
+	pos        <= -expr $codesz "+" 512 | tr -d "\n"
+
+	if $rem != "0" {
+		dd "if=/dev/zero" "of="+$DISKIMG "oflag=seek_bytes" "seek="+$pos "bs="+$rem "count=1"
+	}
+
 	wc -c $DISKIMG
 }
 

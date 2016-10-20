@@ -22,9 +22,8 @@ clearscreen:
 
 printchar:
 	pusha
-	;;  character in SI
+	;;  character in al
 	mov ah, 0Eh
-	lodsb
 	int 10h
 	popa
 	ret
@@ -47,7 +46,9 @@ printstr:
 	ret
 
 getkey:
+        pusha
 	mov ah, 0; wait for key
 	int 16h
+        popa
 	ret
 
