@@ -4,8 +4,10 @@
 
 My initial plan was to make a 16-bit real mode minimal OS because it could be much more simple
 that way and the system does not require 32-bit protected mode features. But below is 
-some trade offs comparison focusing on our use case. It explains why the current choice was
-32-bit (un)real mode.
+some trade offs comparison focusing on our use case. ~~It explains why the current choice was
+32-bit (un)real mode~~. After few tests, it turns out that a simple C compiler as SmallerC will
+not fit in the 64k segment... Unreal mode is dangerous when used with BIOS services... Probably
+the way to go will be 32-bit protected mode.
 
 ## 16-bit real mode
 
@@ -42,7 +44,8 @@ Cons:
 
 Unreal mode is a documented feature of 386 processors that enables up to 4Gib of address space while in real mode.
 Until today, every intel processor since 386 had this feature, but it's very obscure and could lead to problems 
-if not correctly understood.
+if not correctly understood. Some BIOS routines updates the ES segment register, then the processor updates the 
+descriptor cache and put the OS in real mode 16-bit again..
 
 Pros:
 - Easy programming by using BIOS functions;
@@ -54,6 +57,7 @@ Pros:
 Cons:
 - Support may be dropped in the future;
 - Obscure feature;
+- *Require re-enter unreal mode in some BIOS calls*;
  
 ## 32-bit protected mode
  
