@@ -20,32 +20,31 @@
  */
 
 #include "EnzOS/types.h"
-#include "EnzOS/vesa.h"
-#include "EnzOS/term.h"
-#include "EnzOS/win.h"
 
-Term *term;
+uint16 strlen(char *str) {
+        uint16 i = 0;
 
-int main(void) {
-        Term t;
+        while(str[i]) {
+                i++;
+        }
 
-        term = &t;
+        return i;
+}
 
-        terminit(term);
+char* strncpy(char* s1, char* s2, uint16 n)
+{
+        char* res = s1;
 
-        setVGAMode(VMODE);
+        while (n) {
+                n--;
 
-        printf("Welcome to EnzOS\n");
-        printf("Author: %s\n", "Tiago Natel de Moura");
+                if ((*s1++ = *s2++) == '\0')
+                        break;
+        }
 
-        vesaInit();
+        while (n--) {
+                *s1++ = '\0';
+        }
 
-/*        Win win;
-        winInit(&win);
-
-        strncpy(win.top, "EnzOS operating system", 80);
-        strncpy(win.footer, "Tiago Natel de Moura", 80);
-*/
-
-        //winRender(&win);
+        return res;
 }

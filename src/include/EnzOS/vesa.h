@@ -2,7 +2,7 @@
 #define VESA_H
 
 // video mode, video buffer segment and dimensions
-#define VMODE   3 // 40x25 color text mode
+#define VMODE   3 // 80x25 color text mode
 #define VSEG    0xB800
 #define VWIDTH  80
 #define VHEIGHT 25
@@ -33,6 +33,6 @@
 #define BACK_BROWN   0x60
 #define BACK_WHITE   0x70
 
-#define TEXTCOLOR (BACK_BLACK | FORE_BRIGHT_WHITE)
+#define TERMCOLOR (BACK_BLACK | FORE_BRIGHT_WHITE)
 
 #endif

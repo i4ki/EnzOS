@@ -23,7 +23,7 @@ $(OSBIN):
 	cd src && make build
 
 image: $(OSBIN)
-	./scripts/BootProg/mkimg144 -bs ./scripts/BootProg/flp144.bin -o $(IMG) -us src/startup.bin
+	./scripts/BootProg/mkimg144 -bs ./scripts/BootProg/flp144.bin -o $(IMG) -us src/STARTUP.BIN
 
 run: $(IMG)
 	qemu-system-i386 -fda $(IMG) -m 128

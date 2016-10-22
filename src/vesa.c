@@ -1,7 +1,6 @@
+#include "EnzOS/types.h"
+#include "EnzOS/libc.h"
 #include "EnzOS/vesa.h"
-
-typedef unsigned char uint8;
-typedef unsigned short uint16;
 
 typedef struct
 {
@@ -40,30 +39,19 @@ int getVbeInfo(VbeInfo *info) {
 
 void vesaInit() {
         VbeInfo vbe;
-        char str[4];
+        char version[4];
+        char name[5];
         int err;
-        int sz;
 
         // Get and check VBE info
 
         if ((err = getVbeInfo(&vbe)) != 0x4F) {
-                sz = put(0, 1, "GetVbeInfo() failed: ", TEXTCOLOR);
-                put(0, sz+1, err + '0', TEXTCOLOR);
-
+                printf("GetVbeInfo() failed: ");
                 return;
         }
-
-        str[0] = (vbe.Version >> 8)+'0';
-        str[1] = '.';
-        str[2] = (vbe.Version & 0xff) + '0';
-        str[3] = 0;
-
-        put(0, 1, vbe.Signature, TEXTCOLOR);
-        put(4, 1, " ", TEXTCOLOR);
-        put(6, 1, str, TEXTCOLOR);
 }
 
-void poke(unsigned seg, unsigned ofs, unsigned val)
+void poke(uint16 seg, uint16 ofs, unsigned val)
 {
   asm("push ds\n"
       "mov  ds, [bp + 4]\n"
@@ -73,15 +61,26 @@ void poke(unsigned seg, unsigned ofs, unsigned val)
       "pop  ds");
 }
 
-int put(unsigned x, unsigned y, char* s, unsigned color)
-{
-        int i = 0;
-        unsigned ofs = (y * VWIDTH + x) * 2;
-        while (s[i]) {
-                unsigned v = (color << 8) | s[i++];
+uint16 putn(uint8 x, uint8 y, char *s, uint16 sz, unsigned color) {
+        uint16 i = 0;
+        uint16 ofs = (y * VWIDTH + x) * 2;
+
+        for (i = 0; i < sz; i++) {
+                uint16 v = (color << 8) | s[i];
                 poke(VSEG, ofs, v);
                 ofs += 2;
         }
 
         return i;
+}
+
+uint16 putstr(uint8 x, uint8 y, char *s, uint8 color)
+{
+        return putn(x, y, s, strlen(s), color);
+}
+
+void putchar(unsigned x, unsigned y, char c, unsigned color) {
+        uint16 offset = (y * VWIDTH + x) * 2;
+        unsigned v = (color << 8) | c;
+        poke(VSEG, offset, v);
 }
