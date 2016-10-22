@@ -33,4 +33,6 @@
 #define BACK_BROWN   0x60
 #define BACK_WHITE   0x70
 
+#define TEXTCOLOR (BACK_BLACK | FORE_BRIGHT_WHITE)
+
 #endif

@@ -21,29 +21,8 @@
 
 #include "EnzOS/vesa.h"
 
-//asm("org 0x100");
-
-
-int main(void);
-
-void start(void)
-{
-        main();
-}
-
-
-void poke(unsigned seg, unsigned ofs, unsigned val)
-{
-  asm("push ds\n"
-      "mov  ds, [bp + 4]\n"
-      "mov  bx, [bp + 6]\n"
-      "mov  ax, [bp + 8]\n"
-      "mov  [bx], ax\n"
-      "pop  ds");
-}
-
-
 int main(void) {
-        BiosSetGfxMode(VMODE);
-        text(0, 0, "EnzOS Operating System", BACK_BLACK | FORE_BRIGHT_WHITE);
+        setVGAMode(VMODE);
+        vesaInit();
+        put(0, 0, "EnzOS Operating System", BACK_BLACK | FORE_BRIGHT_WHITE);
 }
