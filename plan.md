@@ -7,6 +7,7 @@ that way and the system does not require 32-bit protected mode features. But bel
 some trade offs comparison focusing on our use case. ~~It explains why the current choice was
 32-bit (un)real mode~~. After few tests, it turns out that a simple C compiler as SmallerC will
 not fit in the 64k segment... Unreal mode is dangerous when used with BIOS services... 
+I think the *SMP* approach is the most interesting in our use cases, but is the most challenging.
 
 ## 16-bit real mode
 
@@ -81,6 +82,8 @@ Leave the boot processor in real mode, wake-up another cpu in protected mode (we
 starting executing somewhere in the real mode address space (below 1MB), then setup a new stack, enter protected mode, 
 copy itself to some place above 1MB and configure a mutual exclusion lock mechanism with the real mode  boot'ed cpu. Then EnzOS could be developed in pmode, but use the rmode processor to invoke BIOS services;
 
+As the rmode processor will run in 16-bit and the pmode in 32-bit (or 64-bit if in long mode), we'll support from the compiler to link a flat binary on both arquitectures, or build them separately with different flags and/or compilers.
+
 Pros:
 - Easy programming by using BIOS functions;
 - Easy to setup processor to test;
@@ -89,6 +92,7 @@ Pros:
 
 Cons:
 - The pmode CPU will need to stop executing when using rmode services (BIOS services aren't re-entrant);
+- Complex build system (16- and 32-/64- binaries);
 - **SMP is hard, but doable;**
 
 # Bootloader
