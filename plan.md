@@ -6,8 +6,7 @@ My initial plan was to make a 16-bit real mode minimal OS because it could be mu
 that way and the system does not require 32-bit protected mode features. But below is 
 some trade offs comparison focusing on our use case. ~~It explains why the current choice was
 32-bit (un)real mode~~. After few tests, it turns out that a simple C compiler as SmallerC will
-not fit in the 64k segment... Unreal mode is dangerous when used with BIOS services... Probably
-the way to go will be 32-bit protected mode.
+not fit in the 64k segment... Unreal mode is dangerous when used with BIOS services... 
 
 ## 16-bit real mode
 
@@ -73,6 +72,24 @@ Pros:
 Cons:
 - Requires pmode -> real mode to test user code;
 - **Requires development of drivers (disk, serial, etc);**
+
+## SMP (cpu0 in rmode and cpu1 in pmode)
+
+This is a new idea that I'm not sure will work: 
+
+Leave the boot processor in real mode, wake-up another cpu in protected mode (we don't need to wake-up all of them) 
+starting executing somewhere in the real mode address space (below 1MB), then setup a new stack, enter protected mode, 
+copy itself to some place above 1MB and configure a mutual exclusion lock mechanism with the real mode  boot'ed cpu. Then EnzOS could be developed in pmode, but use the rmode processor to invoke BIOS services;
+
+Pros:
+- Easy programming by using BIOS functions;
+- Easy to setup processor to test;
+- Up to 4Gib address space;
+- Could use video memory and/or BIOS services to write in screen;
+
+Cons:
+- The pmode CPU will need to stop executing when using rmode services (BIOS services aren't re-entrant);
+- **SMP is hard, but doable;**
 
 # Bootloader
 
