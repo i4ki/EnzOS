@@ -74,15 +74,13 @@ Cons:
 - Requires pmode -> real mode to test user code;
 - **Requires development of drivers (disk, serial, etc);**
 
-## SMP (BSP in rmode and cpu1 in pmode)
+## SMP (BSP in rmode and AP in pmode)
 
 This is a new idea that I'm not sure will work: 
 
-Leave the boot processor (BSP) in real mode, wake-up another cpu in protected mode (we don't need to wake-up all of them) 
-starting executing somewhere in the real mode address space (below 1MB), then setup a new stack, enter protected mode, 
-copy itself to some place above 1MB and configure a mutual exclusion lock mechanism with the real mode  boot'ed cpu. Then EnzOS could be developed in pmode, but use the rmode processor to invoke BIOS services;
+Leave the boot processor (BSP) in real mode, wake-up an application processor (AP in intel terminology) in protected mode (we don't need to wake-up all of them) starting executing somewhere in the real mode address space (below 1MB), then setup a new stack, enter protected mode, copy itself to some place above 1MB and configure a mutual exclusion lock mechanism with the real mode  boot'ed cpu. Then EnzOS could be developed in pmode, but use the rmode processor to invoke BIOS services;
 
-As the BSP processor will run in 16-bit and the pmode in 32-bit (or 64-bit if in long mode), we'll need support from the compiler to link a flat binary on both arquitectures, or build them separately with different flags and/or compilers.
+As the BSP processor will run in 16-bit and the AP in 32-bit pmode (or 64-bit if in long mode), we'll need support from the compiler to link a flat binary on both arquitectures, or build them separately with different flags and/or compilers.
 
 Pros:
 - Easy programming by using BIOS functions;
