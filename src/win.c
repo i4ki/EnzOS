@@ -21,31 +21,27 @@
 
 #include "EnzOS/types.h"
 #include "EnzOS/vesa.h"
-#include "EnzOS/term.h"
 #include "EnzOS/win.h"
 
-Term *term;
+void winInit(Win *w) {
+        w->row = 0;
+        w->column = 0;
+        w->color = TERMCOLOR;
+        w->borderColor = BACK_BLACK | FORE_BRIGHT_WHITE;
 
-int main(void) {
-        Term t;
+        memset(w->top, ' ', 80);
+        memset(w->footer, ' ', 80);
+}
 
-        term = &t;
+void winRenderTop(Win *w) {
+        uint8 i = 0;
+        uint8 *tmp = "╔═══════════════════════════════════════════════════";
 
-        terminit(term);
+        putn(0, 0, tmp, strlen(tmp), w->borderColor);
+        //putn(0, 1, w->top, VWIDTH-1, w->color);
+}
 
-        setVGAMode(VMODE);
-
-        printf("Welcome to EnzOS\n");
-        printf("Author: %s\n", "Tiago Natel de Moura");
-
-        vesaInit();
-
-/*        Win win;
-        winInit(&win);
-
-        strncpy(win.top, "EnzOS operating system", 80);
-        strncpy(win.footer, "Tiago Natel de Moura", 80);
-*/
-
-        //winRender(&win);
+void winRender(Win *w) {
+        winRenderTop(w);
+        putn(0, VHEIGHT-1, w->footer, VWIDTH-1, w->color);
 }

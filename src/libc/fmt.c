@@ -18,34 +18,3 @@
  *
  * EnzOS Operating System
  */
-
-#include "EnzOS/types.h"
-#include "EnzOS/vesa.h"
-#include "EnzOS/term.h"
-#include "EnzOS/win.h"
-
-Term *term;
-
-int main(void) {
-        Term t;
-
-        term = &t;
-
-        terminit(term);
-
-        setVGAMode(VMODE);
-
-        printf("Welcome to EnzOS\n");
-        printf("Author: %s\n", "Tiago Natel de Moura");
-
-        vesaInit();
-
-/*        Win win;
-        winInit(&win);
-
-        strncpy(win.top, "EnzOS operating system", 80);
-        strncpy(win.footer, "Tiago Natel de Moura", 80);
-*/
-
-        //winRender(&win);
-}
